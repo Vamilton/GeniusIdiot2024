@@ -20,23 +20,7 @@ namespace GeniusIdiotConsoleApp
                 string userName = Console.ReadLine();
                 do
                 {
-                    int countRightAnswers = 0;
-                    int[] randomNumbers = GetRandomNumbers(countQuestionsAndAnswers);
-                    foreach (int number in randomNumbers)
-                    {
-                        Console.WriteLine("Вопрос №" + (number));
-
-                        Console.WriteLine(questions[number - 1]);
-
-                        int userAnswer = Convert.ToInt32(Console.ReadLine());
-
-                        int rightAnswer = answers[number - 1];
-
-                        if (userAnswer == rightAnswer)
-                        {
-                            countRightAnswers++;
-                        }
-                    }
+                    int countRightAnswers = MainQuestionnaire(countQuestionsAndAnswers, questions, answers);
                     Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
                     Console.WriteLine($"{userName}, твой диагноз: " + diagnoses[countRightAnswers]);
 
@@ -69,10 +53,7 @@ namespace GeniusIdiotConsoleApp
 
             static string[] GetDiagnoses()
             {
-                string[] diagnoses = new string[6]; // были сомнения, не передать ли в метод переменную countQuestionsAndAnswers+1 ,
-                                                    // но не уверена, что количество диагнозов всегда будет на 1 больше, чем вопросов
-
-                                                    // Ответ: Всё верно!
+                string[] diagnoses = new string[6];
                 diagnoses[0] = "кретин";
                 diagnoses[1] = "идиот";
                 diagnoses[2] = "дурак";
@@ -82,7 +63,7 @@ namespace GeniusIdiotConsoleApp
                 return diagnoses;
             }
 
-            static int[] GetRandomNumbers(int countQuestionsAndAnswers)
+            static int[] GetRandomNumbers(int countQuestionsAndAnswers) // Перемешивание вопросов в рандомном порядке
             {
                 Random random = new Random();
                 int[] randomNumbers = Enumerable.Range(1, countQuestionsAndAnswers).OrderBy(x => random.Next()).ToArray();
@@ -90,13 +71,13 @@ namespace GeniusIdiotConsoleApp
 
             }
 
-            static bool WantAgain()//Название метода надо писать с большой буквы +
+            static bool WantAgain() // Запрос у пользователя, не хочет ли он повторить
             {
                 string answer;
                 int attempts = 0;
                 do
                 {
-                    Console.WriteLine("Ещё раз? Да/Нет"); //Здесь пользователь не знает что ему ответить: может быть Да/Нет, а может быть Y/N. Надо ему подсказать. + 
+                    Console.WriteLine("Ещё раз? Да/Нет");
                     answer = Console.ReadLine().ToLower();
                     if (answer == "да") return true;
                     else if (answer == "нет") return false;
@@ -105,14 +86,43 @@ namespace GeniusIdiotConsoleApp
                         Console.Write(attempts == 2 ? "Будем считать, что нет." : "Непонятно. ");
                         attempts++;
                     }
-                    //Когда пользователь уведомлён о том каким должен быть ответ,
-                    //то можно не вводить переменную "doWantAgain", а просто возвращать true или false.
-                    // A: исправила, + добавила проверку на ответы не по существу
+
                 } while (answer != "да" && answer != "нет" && attempts < 3);
                 return false;
+            }
+
+            static int MainQuestionnaire(int countQuestionsAndAnswers, string[] questions, int[] answers) // Основной опросник
+            {
+                int countRightAnswers = 0;
+                int[] randomNumbers = GetRandomNumbers(countQuestionsAndAnswers);
+                foreach (int number in randomNumbers)
+                {
+                    Console.WriteLine("Вопрос №" + (number));
+                    Console.WriteLine(questions[number - 1]);
+
+                    int userAnswer;
+                    string unknownAnswer = Console.ReadLine();
+                    while (!IsNumeric(unknownAnswer))
+                    {
+                        Console.WriteLine("В качестве ответа должно быть число.");
+                        unknownAnswer = Console.ReadLine();
+                    }
+                    userAnswer = int.Parse(unknownAnswer);
+                    int rightAnswer = answers[number - 1];
+
+                    if (userAnswer == rightAnswer)
+                    {
+                        countRightAnswers++;
+                    }
+                }
+                return countRightAnswers;
+            }
+
+            static bool IsNumeric(string unknownAnswer) // Проверка, является ли ответ числом
+            {
+                int number;
+                return int.TryParse(unknownAnswer, out number);
             }
         }
     }
 }
-
-// тест
