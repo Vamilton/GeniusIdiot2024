@@ -141,39 +141,22 @@ namespace GeniusIdiotConsoleApp
                     return diagnoses[5];
                 else
                 {
-                    int groupSize = (countQuestionsAndAnswers - 1) / 4;
-                    if ((countQuestionsAndAnswers - 1) % 4 == 0)
-                    {
-                        return diagnoses[(countRightAnswers + groupSize - 1) / groupSize];
-                    }
+                    double percentRightAnswers = ((double)countRightAnswers / countQuestionsAndAnswers)*100;
+                    if (percentRightAnswers < 25)
+                        return diagnoses[1];
                     else
                     {
-                        int groupSizeResidue = (countQuestionsAndAnswers - 1) % 4;
-                        if (countRightAnswers <= (groupSize + 1))
-                            return diagnoses[1];
-                        else // вот тут я начинаю проверять, сколько "групп" входит в заданное количество ответов
+                        if (percentRightAnswers < 50)
+                            return diagnoses[2];
+                        else
                         {
-                            int technicalCount = countRightAnswers;
-                            int diagnoseCount = 0;
-                            int resizeGroup = 1;
-                            do
-                            {
-                                technicalCount -= (groupSize + resizeGroup);
-                                if (technicalCount >= 0)
-                                    diagnoseCount++;
-                                groupSizeResidue--;
-                                if (groupSizeResidue <= 0) resizeGroup = 0;
-                            } while (technicalCount >= groupSize + resizeGroup * (groupSizeResidue)) ;
-                            if (technicalCount > 0)
-                                diagnoseCount++;
-
-                            return diagnoses[diagnoseCount];
-
+                            if(percentRightAnswers < 75)
+                                return diagnoses[3];
+                            else
+                                return diagnoses[4];
                         }
-
-
                     }
-                  
+  
                 }
 
             }
