@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 
 namespace GeniusIdiotConsoleApp
 {
@@ -22,10 +20,16 @@ namespace GeniusIdiotConsoleApp
                 {
                     int countRightAnswers = GetRightAnswersCount(countQuestionsAndAnswers, questions, answers);
                     Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
-                    Console.WriteLine($"{userName}, твой диагноз: " + GetUserDiagnose(countRightAnswers, countQuestionsAndAnswers, diagnoses));
-
+                    string userDiagnose = GetUserDiagnose(countRightAnswers, countQuestionsAndAnswers, diagnoses);
+                    Console.WriteLine($"{userName}, твой диагноз: " + userDiagnose);
+                    string[] userResults = [userName, countRightAnswers.ToString(), userDiagnose];
+                    WriteUserResult(userResults, "results.csv");
                 }
+                
                 while (WantAgain());
+                Console.WriteLine("Показать таблицу результатов? Да/Нет");
+                if (Console.ReadLine().ToLower() == "да")
+                    ReadAllResuts("results.csv");
 
             }
 
@@ -119,9 +123,7 @@ namespace GeniusIdiotConsoleApp
                     int rightAnswer = answers[number - 1];
 
                     if (userAnswer == rightAnswer)
-                    {
                         countRightAnswers++;
-                    }
                 }
                 return countRightAnswers;
             }
@@ -134,7 +136,6 @@ namespace GeniusIdiotConsoleApp
 
             static string GetUserDiagnose(int countRightAnswers, int countQuestionsAndAnswers, string[] diagnoses)
             {
-
                 if (countRightAnswers == 0)
                     return diagnoses[0];
                 else if (countRightAnswers == countQuestionsAndAnswers)
@@ -161,6 +162,33 @@ namespace GeniusIdiotConsoleApp
 
             }
 
+            static void ReadAllResuts(string filePath) // читает csv 
+            {
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    string line;
+                    int count = 0;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        count++;
+                        string[] parts = line.Split(',');
+
+                        if (count == 1)
+                            Console.WriteLine($"{parts[0]} | {parts[1]} | {parts[2]}");
+                        else
+                            Console.WriteLine($"{parts[0]}: {parts[1]}, {parts[2]}");
+                    }
+                }
+
+            }
+
+            static void WriteUserResult(string[] userResults, string filePath)
+            {
+                using (StreamWriter writer = new StreamWriter(filePath, true, Encoding.UTF8))
+                {
+                    writer.WriteLine(string.Join(",", userResults));
+                }
+            }
         }
     }
 }
