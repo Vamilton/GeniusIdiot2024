@@ -28,3 +28,8 @@ C:\Users\Блейз\source\repos\GeniusIdiot2024\GeniusIdiotConsoleApp\obj\Debug
 C:\Users\Блейз\source\repos\GeniusIdiot2024\GeniusIdiotConsoleApp\obj\Debug\net8.0\GeniusIdiotConsoleApp.pdb
 C:\Users\Блейз\Source\Repos\GeniusIdiot2024\GeniusIdiotConsoleApp\obj\Debug\net8.0\GeniusIdiotConsoleApp.genruntimeconfig.cache
 C:\Users\Блейз\Source\Repos\GeniusIdiot2024\GeniusIdiotConsoleApp\obj\Debug\net8.0\ref\GeniusIdiotConsoleApp.dll
+C:\Users\Блейз\source\repos\GeniusIdiot2024\GeniusIdiotConsoleApp\obj\Debug\net8.0\GeniusIdiotConsoleApp.csproj.AssemblyReference.cache
+C:\Users\Блейз\source\repos\GeniusIdiot2024\GeniusIdiotConsoleApp\obj\Debug\net8.0\GeniusIdiotConsoleApp.Properties.Resources.resources
+C:\Users\Блейз\source\repos\GeniusIdiot2024\GeniusIdiotConsoleApp\obj\Debug\net8.0\GeniusIdiotConsoleApp.csproj.GenerateResource.cache
+C:\Users\Блейз\source\repos\GeniusIdiot2024\GeniusIdiotConsoleApp\bin\Debug\net8.0\CsvHelper.dll
+C:\Users\Блейз\source\repos\GeniusIdiot2024\GeniusIdiotConsoleApp\obj\Debug\net8.0\GeniusId.5E60B359.Up2Date

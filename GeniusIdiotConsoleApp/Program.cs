@@ -14,22 +14,31 @@ namespace GeniusIdiotConsoleApp
                 string[] questions = GetQuestions(countQuestionsAndAnswers);
                 int[] answers = GetAnswers(countQuestionsAndAnswers);
                 string[] diagnoses = GetDiagnoses();
+                int[] columnWidths = new int[] { 25, 28, 10 };
                 Console.WriteLine("Привет, представься: ");
                 string userName = Console.ReadLine();
                 do
                 {
-                    int countRightAnswers = GetRightAnswersCount(countQuestionsAndAnswers, questions, answers);
-                    Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
-                    string userDiagnose = GetUserDiagnose(countRightAnswers, countQuestionsAndAnswers, diagnoses);
-                    Console.WriteLine($"{userName}, твой диагноз: " + userDiagnose);
-                    string[] userResults = [userName, countRightAnswers.ToString(), userDiagnose];
-                    WriteUserResult(userResults, "results.csv");
-                }
-                
-                while (WantAgain());
-                Console.WriteLine("Показать таблицу результатов? Да/Нет");
-                if (Console.ReadLine().ToLower() == "да")
-                    ReadAllResuts("results.csv");
+                    do
+                    {
+                        int countRightAnswers = GetRightAnswersCount(countQuestionsAndAnswers, questions, answers);
+                        Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
+                        string userDiagnose = GetUserDiagnose(countRightAnswers, countQuestionsAndAnswers, diagnoses);
+                        Console.WriteLine($"{userName}, твой диагноз: " + userDiagnose);
+                        string[] userResults = [userName, countRightAnswers.ToString(), userDiagnose];
+                        WriteUserResult(userResults, "results.csv");
+                    }
+
+                    while (WantAgain());
+                    Console.WriteLine("Показать таблицу результатов? Да/Нет");
+                    if (Console.ReadLine().ToLower() == "да")
+                        ReadAllResuts("results.csv", columnWidths);
+                    else
+                        break;
+
+                } while (WantAgain());
+
+
 
             }
 
@@ -67,10 +76,10 @@ namespace GeniusIdiotConsoleApp
             {
                 string[] diagnoses = new string[6];
                 diagnoses[0] = "кретин";
-                diagnoses[1] = "идиот 1";
-                diagnoses[2] = "дурак 2";
-                diagnoses[3] = "нормальный 3";
-                diagnoses[4] = "талант 4";
+                diagnoses[1] = "идиот";
+                diagnoses[2] = "дурак";
+                diagnoses[3] = "нормальный";
+                diagnoses[4] = "талант";
                 diagnoses[5] = "гений";
                 return diagnoses;
             }
@@ -142,7 +151,7 @@ namespace GeniusIdiotConsoleApp
                     return diagnoses[5];
                 else
                 {
-                    double percentRightAnswers = ((double)countRightAnswers / countQuestionsAndAnswers)*100;
+                    double percentRightAnswers = ((double)countRightAnswers / countQuestionsAndAnswers) * 100;
                     if (percentRightAnswers < 25)
                         return diagnoses[1];
                     else
@@ -151,36 +160,17 @@ namespace GeniusIdiotConsoleApp
                             return diagnoses[2];
                         else
                         {
-                            if(percentRightAnswers < 75)
+                            if (percentRightAnswers < 75)
                                 return diagnoses[3];
                             else
                                 return diagnoses[4];
                         }
                     }
-  
+
                 }
 
             }
 
-            static void ReadAllResuts(string filePath) // читает csv 
-            {
-                using (StreamReader reader = new StreamReader(filePath))
-                {
-                    string line;
-                    int count = 0;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        count++;
-                        string[] parts = line.Split(',');
-
-                        if (count == 1)
-                            Console.WriteLine($"{parts[0]} | {parts[1]} | {parts[2]}");
-                        else
-                            Console.WriteLine($"{parts[0]}: {parts[1]}, {parts[2]}");
-                    }
-                }
-
-            }
 
             static void WriteUserResult(string[] userResults, string filePath)
             {
@@ -189,7 +179,29 @@ namespace GeniusIdiotConsoleApp
                     writer.WriteLine(string.Join(",", userResults));
                 }
             }
+
+
+            static void ReadAllResuts(string csvFilePath, int[] columnWidths)
+            {
+                string[] lines = File.ReadAllLines(csvFilePath, Encoding.UTF8);
+                string[][] data = lines.Select(line => line.Split(',')).ToArray();
+                for (int i = 0; i < data.Length; i++)
+                {
+                    for (int j = 0; j < data[i].Length; j++)
+                    {
+                        string value = data[i][j].Substring(0, Math.Min(data[i][j].Length, columnWidths[j]));
+                        value = value.PadRight(columnWidths[j], ' ');
+
+                        Console.Write(value);
+
+                        if (j < data[i].Length - 1)
+                            Console.Write(" | ");
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
-//
+
