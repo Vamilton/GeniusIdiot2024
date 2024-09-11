@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 
 namespace GeniusIdiotConsoleApp
 {
@@ -35,6 +35,9 @@ namespace GeniusIdiotConsoleApp
                         ReadAllResuts("results.csv", columnWidths);
                     else
                         break;
+                Console.WriteLine("Показать таблицу результатов? Да/Нет");
+                if (Console.ReadLine().ToLower() == "да")
+                    ReadAllResuts("results.csv");
 
                 } while (WantAgain());
 
