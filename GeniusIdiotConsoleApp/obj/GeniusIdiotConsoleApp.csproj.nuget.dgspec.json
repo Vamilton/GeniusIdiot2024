@@ -48,6 +48,10 @@
             "CsvHelper": {
               "target": "Package",
               "version": "[33.0.1, )"
+            },
+            "NuGet.Packaging": {
+              "target": "Package",
+              "version": "[6.11.0, )"
             }
           },
           "imports": [

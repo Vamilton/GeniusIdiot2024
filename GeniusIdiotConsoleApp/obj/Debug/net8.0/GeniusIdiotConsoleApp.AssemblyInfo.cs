@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GeniusIdiotConsoleApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4f4d514a76723e8b90e6fa386d3a94de188c73cd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+af6294d7abb3527326f3d60d7259352eb3727fe0")]
 [assembly: System.Reflection.AssemblyProductAttribute("GeniusIdiotConsoleApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GeniusIdiotConsoleApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

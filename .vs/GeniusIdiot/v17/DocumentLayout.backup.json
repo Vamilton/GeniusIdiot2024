@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\\u0411\u043B\u0435\u0439\u0437\\source\\repos\\GeniusIdiot2024\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{40A4AECD-FC44-4309-9BDD-BC34E9B94529}|GeniusIdiotConsoleApp\\GeniusIdiotConsoleApp.csproj|c:\\users\\\u0431\u043B\u0435\u0439\u0437\\source\\repos\\geniusidiot2024\\geniusidiotconsoleapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{40A4AECD-FC44-4309-9BDD-BC34E9B94529}|GeniusIdiotConsoleApp\\GeniusIdiotConsoleApp.csproj|solutionrelative:geniusidiotconsoleapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\\u0411\u043B\u0435\u0439\u0437\\source\\repos\\GeniusIdiot2024\\GeniusIdiotConsoleApp\\Program.cs",
+              "RelativeDocumentMoniker": "GeniusIdiotConsoleApp\\Program.cs",
+              "ToolTip": "C:\\Users\\\u0411\u043B\u0435\u0439\u0437\\source\\repos\\GeniusIdiot2024\\GeniusIdiotConsoleApp\\Program.cs*",
+              "RelativeToolTip": "GeniusIdiotConsoleApp\\Program.cs*",
+              "ViewState": "AgIAAHwAAAAAAAAAAADwvyMAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-11T18:49:13.917Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

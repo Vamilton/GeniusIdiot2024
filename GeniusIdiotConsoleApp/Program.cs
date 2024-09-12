@@ -1,3 +1,6 @@
+using CsvHelper.Configuration;
+using CsvHelper;
+using System.Globalization;
 using System.Text;
 
 namespace GeniusIdiotConsoleApp
@@ -14,34 +17,21 @@ namespace GeniusIdiotConsoleApp
                 string[] questions = GetQuestions(countQuestionsAndAnswers);
                 int[] answers = GetAnswers(countQuestionsAndAnswers);
                 string[] diagnoses = GetDiagnoses();
-                int[] columnWidths = new int[] { 25, 28, 10 };
+                string csvFilePath = "results.csv";
+                string[] questionsToRepeat = ["Ещё раз?", "Показать таблицу результатов?"];
                 Console.WriteLine("Привет, представься: ");
                 string userName = Console.ReadLine();
                 do
                 {
-                    do
-                    {
-                        int countRightAnswers = GetRightAnswersCount(countQuestionsAndAnswers, questions, answers);
-                        Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
-                        string userDiagnose = GetUserDiagnose(countRightAnswers, countQuestionsAndAnswers, diagnoses);
-                        Console.WriteLine($"{userName}, твой диагноз: " + userDiagnose);
-                        string[] userResults = [userName, countRightAnswers.ToString(), userDiagnose];
-                        WriteUserResult(userResults, "results.csv");
-                    }
-
-                    while (WantAgain());
-                    Console.WriteLine("Показать таблицу результатов? Да/Нет");
-                    if (Console.ReadLine().ToLower() == "да")
-                        ReadAllResuts("results.csv", columnWidths);
-                    else
-                        break;
-                Console.WriteLine("Показать таблицу результатов? Да/Нет");
-                if (Console.ReadLine().ToLower() == "да")
-                    ReadAllResuts("results.csv");
-
-                } while (WantAgain());
-
-
+                    int countRightAnswers = GetRightAnswersCount(countQuestionsAndAnswers, questions, answers);
+                    Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
+                    string userDiagnose = GetUserDiagnose(countRightAnswers, countQuestionsAndAnswers, diagnoses);
+                    Console.WriteLine($"{userName}, твой диагноз: " + userDiagnose);
+                    string[] userResults = [userName, countRightAnswers.ToString(), userDiagnose];
+                    WriteUserResult(userResults, csvFilePath);
+                    if (WantAgain(questionsToRepeat[1]))
+                        ReadAllResuts(csvFilePath);
+                } while (WantAgain(questionsToRepeat[0]));
 
             }
 
@@ -87,7 +77,7 @@ namespace GeniusIdiotConsoleApp
                 return diagnoses;
             }
 
-            static int[] GetRandomNumbers(int countQuestionsAndAnswers) // Перемешивание вопросов в рандомном порядке
+            private static int[] GetRandomNumbers(int countQuestionsAndAnswers) // Перемешивание вопросов в рандомном порядке
             {
                 Random random = new Random();
                 int[] randomNumbers = Enumerable.Range(1, countQuestionsAndAnswers).OrderBy(x => random.Next()).ToArray();
@@ -95,13 +85,13 @@ namespace GeniusIdiotConsoleApp
 
             }
 
-            static bool WantAgain() // Запрос у пользователя, не хочет ли он повторить
+            private static bool WantAgain(string question) // Запрос у пользователя, не хочет ли он повторить
             {
                 string answer;
                 int attempts = 0;
                 do
                 {
-                    Console.WriteLine("Ещё раз? Да/Нет");
+                    Console.WriteLine($"{question} Да/Нет");
                     answer = Console.ReadLine().ToLower();
                     if (answer == "да") return true;
                     else if (answer == "нет") return false;
@@ -140,7 +130,7 @@ namespace GeniusIdiotConsoleApp
                 return countRightAnswers;
             }
 
-            static bool IsNumeric(string unknownAnswer) // Проверка, является ли ответ числом
+            private static bool IsNumeric(string unknownAnswer) // Проверка, является ли ответ числом
             {
                 int number;
                 return int.TryParse(unknownAnswer, out number);
@@ -169,9 +159,7 @@ namespace GeniusIdiotConsoleApp
                                 return diagnoses[4];
                         }
                     }
-
                 }
-
             }
 
 
@@ -184,26 +172,49 @@ namespace GeniusIdiotConsoleApp
             }
 
 
-            static void ReadAllResuts(string csvFilePath, int[] columnWidths)
+            static void ReadAllResuts(string csvFilePath)
             {
-                string[] lines = File.ReadAllLines(csvFilePath, Encoding.UTF8);
-                string[][] data = lines.Select(line => line.Split(',')).ToArray();
-                for (int i = 0; i < data.Length; i++)
+                int[] columnWidths = new int[] { GetMaxFirstColumnWidth(csvFilePath), 28, 10 };
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = ",", HasHeaderRecord = false };
+                config.MissingFieldFound = null;
+                using (var reader = new StreamReader(csvFilePath))
+                using (var csv = new CsvReader(reader, config))
                 {
-                    for (int j = 0; j < data[i].Length; j++)
+                    var records = csv.GetRecords<ResultsTable>().ToList();
+                    foreach (var record in records)
                     {
-                        string value = data[i][j].Substring(0, Math.Min(data[i][j].Length, columnWidths[j]));
-                        value = value.PadRight(columnWidths[j], ' ');
-
-                        Console.Write(value);
-
-                        if (j < data[i].Length - 1)
-                            Console.Write(" | ");
+                        Console.WriteLine("{0,-" + columnWidths[0] + "}{1,-" + columnWidths[1] + "}{2,-" + columnWidths[2] + "}",
+                                          record.Name+ " ",
+                                          record.countRightAnswers.ToString(),
+                                          record.diagnose);
                     }
-                    Console.WriteLine();
                 }
-                Console.WriteLine();
             }
+
+            private class ResultsTable
+            {
+                public string Name { get; set; }
+                public string countRightAnswers { get; set; }
+                public string diagnose { get; set; }
+            }
+
+
+            private static int GetMaxFirstColumnWidth(string csvFilePath)
+            {
+                using (var reader = new StreamReader(csvFilePath))
+                using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)))
+                {
+                    int maxFirstColumnWidth = 0;
+                    while (csv.Read())
+                    {
+                        string firstColumnValue = csv.GetField<string>(0);
+                        if (firstColumnValue.Length > maxFirstColumnWidth)
+                            maxFirstColumnWidth = firstColumnValue.Length;
+                    }
+                    return maxFirstColumnWidth+1;
+                }
+            }
+
         }
     }
 }
